@@ -1,0 +1,12 @@
+{
+    "getStarted": "Get Started Now",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "accountInfoTip": "Create an account or log in to explore our app",
+    "email": "Email",
+    "password": "Password", 
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "loginBtn": "Log In",
+    "signupBtn": "Register"
+} 
