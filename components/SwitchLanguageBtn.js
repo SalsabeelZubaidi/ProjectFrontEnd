@@ -8,8 +8,7 @@ const SwitchLanguageBtn = ({switchLanguage}) => {
         <View style={{ zIndex: 100, bottom:400 , padding:0}} >
          <TouchableOpacity onPress={switchLanguage}>
             <FontAwesomeIcon icon={faGlobe} />
-         </TouchableOpacity>
-           
+         </TouchableOpacity> 
         </View>
     );
 };

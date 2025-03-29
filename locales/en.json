@@ -1,8 +1,8 @@
 {
-    "getStarted": "Get Started Now",
+    "signupTitle": "Get Started Now",
     "login": "Log In",
     "signup": "Sign Up",
-    "accountInfoTip": "Create an account or log in to explore our app",
+    "signupSubTitle": "Create an account or log in to explore our app",
     "email": "Email",
     "password": "Password", 
     "firstName": "First Name",
