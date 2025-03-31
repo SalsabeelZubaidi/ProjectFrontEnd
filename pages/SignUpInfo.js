@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Text, StyleSheet, View, Button, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 import {
   SafeAreaView,
   SafeAreaProvider

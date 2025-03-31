@@ -4,9 +4,21 @@
     "signup": "تسجيل الدخول",
     "signupSubTitle": "انشئ حسابا او قم بتسجيل الدخول لحسابك",
     "email": "الايميل",
-    "password": "كلمة السر",
+    "password": "كلمة المرور",
     "firstName": "الاسم الاول",
     "lastName": "اسم العائلة",
     "loginBtn": "الدخول", 
-    "signupBtn": "تسجيل الدخول"
+    "signupBtn": "تسجيل الدخول",
+    "forgetPassword" : " نسيت كلمة المرور ؟",
+    "genderPlaceholder":"الجنس",
+    "male":"ذكر",
+    "female":"انثى",
+    "dob":"تاريخ الولادة",
+    "forgetPassHeader" : "نسيت كلمة المرور",
+    "forgetPassSubtitle" : "الرجاء ادخال ايمبلك لاعادة ضبط كلمة المرور",
+    "resetPassBtn" : "ضبط كلمة المرور",
+    "setPassHeader":"تعيين كلمة مرور جديدة" ,
+    "setPassSubtitle" : "  انشئ كلمة مرور جديدة, تأكد بأنها تختلف عن السابقات لأغراض الأمان",
+    "confirmPass" : "تأكيد كلمة المرور",
+    "updatePassBtn" : "تحديث كلمة المرور"
 } 

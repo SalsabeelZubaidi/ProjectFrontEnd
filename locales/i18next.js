@@ -13,9 +13,9 @@ export const languageRecources= {
 };
 
 i18n.use(initReactI18next).init({
-    resources: languageRecources,
-    lng: 'en',
-    fallbackLng: 'en'
-  });
+  resources: languageRecources,
+  lng: 'en',
+  fallbackLng: 'en'
+});
 
 export default i18n;

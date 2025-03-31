@@ -8,5 +8,17 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "loginBtn": "Log In",
-    "signupBtn": "Register"
+    "signupBtn": "Register",
+    "forgetPassword" : "Forgot Password?",
+    "genderPlaceholder":"Gender",
+    "male":"Male",
+    "female":"Female",
+    "dob":"Date of Birth",
+    "forgetPassHeader" : "Forgot Password",
+    "forgetPassSubtitle" : "Please Enter Your Email To Reset Your Password",
+    "resetPassBtn" : "Reset Password",
+    "setPassHeader" : "Set a New Password",
+    "setPassSubtitle" : "Create a New Password. Ensure It Differs From The Previos Ones For Security",
+    "confirmPass" : "Confirm Password",
+    "updatePassBtn": "Update Password"
 } 
