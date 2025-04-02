@@ -20,5 +20,11 @@
     "setPassHeader" : "Set a New Password",
     "setPassSubtitle" : "Create a New Password. Ensure It Differs From The Previos Ones For Security",
     "confirmPass" : "Confirm Password",
-    "updatePassBtn": "Update Password"
+    "updatePassBtn": "Update Password" , 
+    "welcomeMsg" : "welcome [user_first_ name ] to help you we need u to answer a few questions first :)",
+    "getStartedBtn" : "Les's Go !",
+    "cigsCount" : "How Many Cigarettes Do You Smoke Per Day?" , 
+    "cigsCountPerPack" : "How Many Cigarettes Are In The Pack?",
+    "packCost" : "How Much Does The Pack Costs?",
+    "quitTime" : "In How Long Are You Planning To Quit?"
 } 

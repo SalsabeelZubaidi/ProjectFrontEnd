@@ -8,6 +8,8 @@ import SignUp from './pages/SignUp';
 import SignUpInfo from './pages/SignUpInfo';
 import ForgetPass from './pages/ForgetPass';
 import SetPass from './pages/SetPass';
+import QuestionsScreen from './pages/QuestionsScreen';
+
 import { LanguageProvider, useLanguage } from './LanguageContext'; 
 
 const Stack = createNativeStackNavigator();
@@ -55,6 +57,11 @@ function AppNavigation() {
            <Stack.Screen
             name="SetPass"
             component={SetPass}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="QuestionsScreen"
+            component={QuestionsScreen}
             initialParams={{ translation: t }}
           />
         </Stack.Navigator>

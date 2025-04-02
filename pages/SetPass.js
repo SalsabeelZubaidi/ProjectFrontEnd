@@ -19,11 +19,11 @@ const wrongPassToast = () => {
   } else if((password != confirmPassword) ){
     ToastAndroid.show('Passwords Do Not Match!', ToastAndroid.LONG);
   }else {
-    LoginPage();
+    LoginScreen();
   }
 }
 
-  const LoginPage = () => {
+  const LoginScreen = () => {
      navigation.navigate('SignUp');
   };
 
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 22,
     marginTop:9
-  },
+  }
 });
 
 
