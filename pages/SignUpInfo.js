@@ -1,62 +1,49 @@
-import React, { Component } from 'react';
-import {Text, StyleSheet, View, Button, TouchableOpacity} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import { useLanguage } from '../LanguageContext';
+import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
 
-import {
-  SafeAreaView,
-  SafeAreaProvider
-} from 'react-native-safe-area-context';
+const SignUpInfo = ({ route, navigation }) => {
+  const { translation } = route.params;
+  const { language, switchLanguage } = useLanguage(); 
 
-class SignUpInfo extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-      }; 
-    }
-
-
-    getStarted=()=>{
-        console.log('getStarted');
-    }
+  const [email, setEmail] = useState('');
  
+  const QuestionsScreen = () => { ///go to FillInfo screen
+     navigation.navigate('QuestionsScreen');
+  };
 
-    render() {
+  return (
+    <SafeAreaProvider style={{backgroundColor: 'white'}} >
+      <SafeAreaView>
 
-      const { translation } = this.props.route.params;
+        <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
 
-      return (
-        <SafeAreaProvider>
-          <SafeAreaView style={styles.signup}>
+        <View style={styles.text}>
+        <Text style= {{fontSize:20 , textAlign:'center'}}> {translation('welcomeMsg')}</Text>
+        </View>
 
-          
-            <View className="header">
-                <Text>{translation('getStarted')}</Text>
-            </View>
-            <View>
-              <Button
-                onPress={()=>this.getStarted()}
-                title={translation('getStarted')}
-                color="#841584"
-              />
-            </View>
 
-          </SafeAreaView>
-        </SafeAreaProvider>
-       
-      );
-    }
-}
+        <View style={{ borderRadius: 10, overflow: 'hidden', marginTop: 16 , width:100 , alignSelf:'center'}}>
+          <Button style={styles.btn}
+          onPress={QuestionsScreen}
+          title={translation('getStartedBtn')}
+          color="#6b8a6b"
+          />
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+};
 
 
 const styles = StyleSheet.create({
-  signup: {
-    flex:1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    width: '100%',
-  },
-   
+  text:{
+    marginTop:180
+  } , 
+  
 });
+
 
 export default SignUpInfo;
