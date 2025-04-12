@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe'
 import { useLanguage } from "../LanguageContext"; 
@@ -7,13 +7,25 @@ import { useLanguage } from "../LanguageContext";
 const SwitchLanguageBtn = ({switchLanguage}) => {
 
     return (
-        <View  style={{ position:'absolute', zIndex: 100, top:10 , right:10 , padding:0}}>
+        <View style={styles.logo}>
          <TouchableOpacity onPress={ switchLanguage}>
-            <FontAwesomeIcon icon={faGlobe} />
+            <FontAwesomeIcon icon={faGlobe} size={25} color='#6b8a6b'/>
          </TouchableOpacity> 
         </View>
     );
 
 };
 
+
+const styles = StyleSheet.create({   
+    logo:{
+        position:'absolute',
+        top: 75,
+        right:10,
+        color:'#6b8a6b'
+        
+        
+    }
+});
+  
 export default SwitchLanguageBtn;
