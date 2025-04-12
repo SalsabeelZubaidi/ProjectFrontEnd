@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
+import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import SelectDropdown from 'react-native-select-dropdown';
 import { I18nManager } from 'react-native';
+import LogoImage from '../components/LogoImage';
 
 const SignUp = ({ route, navigation }) => {
   const { translation } = route.params;
@@ -52,159 +53,168 @@ const SignUp = ({ route, navigation }) => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.signup}>
-
+      <SafeAreaView style={styles.container}>
         <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
+        <LogoImage/>
 
-        <View style={styles.signupHeader}>
-          <Text style={styles.signupTitle}>{translation('signupTitle')}</Text>
-          <Text style={styles.signupSubTitle}>{translation('signupSubTitle')}</Text>
-        </View>
-
-        <View style={styles.signupTabs}>
-          <TouchableOpacity onPress={() => switchType('login')}>
-            <View style={styles.signupTabItem}><Text style={ type =="login"?styles.activeTabText :styles.signupTabItem }>{translation('login')}</Text></View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => switchType('signup')}>
-            <View style={styles.signupTabItem}><Text style={ type =="signup"?styles.activeTabText :styles.signupTabItem }>{translation('signup')}</Text></View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.signupForm}>
-          {type === 'signup' && (
-            <View>
-              <View>
-                <Text style={{fontWeight:'500'}}>{translation('firstName')}</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setFirstName}
-                  value={firstName}
-                  inputMode="text"
-                />
-              </View>
-              <View>
-                <Text style={{fontWeight:'500'}}>{translation('lastName')}</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={setLastName}
-                  value={lastName}
-                  inputMode="text"
-                />
-              </View>
-            </View>
-          )}
-
-          <View>
-            <Text style={{fontWeight:'500'}}>{translation('email')}</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setEmail}
-              value={email}
-              inputMode="email"
-            />
+        <View style={styles.screenContainer}>
+          <View style={styles.signupHeader}>
+            <Text style={styles.signupTitle}>{translation('signupTitle')}</Text>
+            <Text style={styles.signupSubTitle}>{translation('signupSubTitle')}</Text>
           </View>
 
-          
-
-          {type === 'login' && (
-            <>
-            <View>
-            <Text style={{fontWeight:'500'}}>{translation('password')}</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setPassword}
-              value={password}
-              inputMode="password"
-              secureTextEntry={true}
-            />
-          </View>
-            
-            
-            <TouchableOpacity onPress={forgetPassPage} style={{ left: 185, marginBottom: 10 }}>
-              <Text style={{ fontWeight: 'bold', color: '#4d81e7' }}>
-                {translation('forgetPassword')}
-              </Text>
+          <View style={styles.signupTabs}>
+            <TouchableOpacity onPress={() => switchType('login')}>
+              <View style={styles.inactiveTabText}><Text style={ type =="login"?styles.activeTabText :styles.inactiveTabText }>{translation('login')}</Text></View>
             </TouchableOpacity>
-            </>
-          )}
-          
+            <TouchableOpacity onPress={() => switchType('signup')}>
+              <View style={styles.inactiveTabText}><Text style={ type =="signup"?styles.activeTabText :styles.inactiveTabText }>{translation('signup')}</Text></View>
+            </TouchableOpacity>
+          </View>
 
-          {type === 'signup' && (
-            <>
+
+          <View style={{ flex: 1}}>
+          <ScrollView style={{marginBottom:5 , height:180, minHeight:250 }}>
+          <View style={styles.signupForm}>
+            {type === 'signup' && (
               <View>
-                <View style={styles.inputContainer}>
-                  <Text style={{fontWeight:'500'}}>{translation('dob')}</Text>
-                  <TouchableOpacity onPress={showDatePicker}>
-                    <View style={styles.input}>
-                      <Text>{dob.toLocaleDateString()}</Text>
-                    </View>
-                  </TouchableOpacity>
+              
+                <View>
+                  <Text style={{fontWeight:'500'}}>{translation('firstName')}</Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={setFirstName}
+                    value={firstName}
+                    inputMode="text"
+                  />
+                </View>
+                <View>
+                  <Text style={{fontWeight:'500'}}>{translation('lastName')}</Text>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={setLastName}
+                    value={lastName}
+                    inputMode="text"
+                  />
+                </View>
+                <View>
+              <Text style={{fontWeight:'500'}}>{translation('email')}</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setEmail}
+                value={email}
+                inputMode="email"
+              />
+            </View>
+                <View>
+                  <View style={styles.inputContainer}>
+                    <Text style={{fontWeight:'500'}}>{translation('dob')}</Text>
+                    <TouchableOpacity onPress={showDatePicker}>
+                      <View style={styles.input}>
+                        <Text>{dob.toLocaleDateString()}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+
+                  {isDatePickerVisible && (
+                    <DateTimePicker
+                      value={dob}
+                      mode="date"
+                      display="default"
+                      onChange={handleDateChange}
+                      minimumDate={new Date(1900, 0, 1)}
+                      maximumDate={new Date()}
+                      placeholder="d/M/y"
+                    />
+                  )}
                 </View>
 
-                {isDatePickerVisible && (
-                  <DateTimePicker
-                    value={dob}
-                    mode="date"
-                    display="default"
-                    onChange={handleDateChange}
-                    minimumDate={new Date(1900, 0, 1)}
-                    maximumDate={new Date()}
-                    placeholder="d/M/y"
+                <View>
+                  <RNPickerSelect
+                    placeholder={{
+                      label: translation('genderPlaceholder'),
+                      value: null,
+                    }}
+                    items={genderOptions}
+                    onValueChange={setGender}
+                    value={gender}
+                    style={pickerSelectStyles}
                   />
-                )}
-              </View>
+                </View>
 
-              <View>
-                <RNPickerSelect
-                  placeholder={{
-                    label: translation('genderPlaceholder'),
-                    value: null,
-                  }}
-                  items={genderOptions}
-                  onValueChange={setGender}
-                  value={gender}
-                  style={pickerSelectStyles}
-                />
-              </View>
+                <View style={styles.dropdownContainer}>
+                  <SelectDropdown
+                    data={genderOptions}
+                    onSelect={setGender}
+                    buttonTextAfterSelection={(selectedItem) => selectedItem.title}
+                    rowTextForSelection={(item) => item.title}
+                    buttonStyle={styles.dropdownButtonStyle}
+                    buttonTextStyle={styles.dropdownButtonTxtStyle}
+                    dropdownStyle={styles.dropdownMenuStyle}
+                    renderDropdownIcon={() => <Text>▼</Text>}
+                    renderButtonText={(selectedItem) => {
+                      return selectedItem ? selectedItem.title : translation('genderPlaceholder');
+                    }}
+                  />
+                </View>
 
-              <View style={styles.dropdownContainer}>
-                <SelectDropdown
-                  data={genderOptions}
-                  onSelect={setGender}
-                  buttonTextAfterSelection={(selectedItem) => selectedItem.title}
-                  rowTextForSelection={(item) => item.title}
-                  buttonStyle={styles.dropdownButtonStyle}
-                  buttonTextStyle={styles.dropdownButtonTxtStyle}
-                  dropdownStyle={styles.dropdownMenuStyle}
-                  renderDropdownIcon={() => <Text>▼</Text>}
-                  renderButtonText={(selectedItem) => {
-                    return selectedItem ? selectedItem.title : translation('genderPlaceholder');
-                  }}
-                />
+                <View>
+              <Text style={{fontWeight:'500'}}>{translation('password')}</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setPassword}
+                value={password}
+                inputMode="password"
+                secureTextEntry={true}
+              />
+            </View>
+            
               </View>
-
-              <View>
-            <Text style={{fontWeight:'500'}}>{translation('password')}</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={setPassword}
-              value={password}
-              inputMode="password"
-              secureTextEntry={true}
-            />
+            )}
+          </View> 
+          </ScrollView>
           </View>
+            
+          <View style={styles.loginForm}>  
+            {type === 'login' && (
+              <>
+              <View>
+              <Text style={{fontWeight:'500'}}>{translation('email')}</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setEmail}
+                value={email}
+                inputMode="email"
+              />
+            </View>
+              <View>
+              <Text style={{fontWeight:'500'}}>{translation('password')}</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setPassword}
+                value={password}
+                inputMode="password"
+                secureTextEntry={true}
+              />
+            </View>
+              
+              
+              <TouchableOpacity onPress={forgetPassPage} style={{ left: 185, marginBottom: 10 }}>
+                <Text style={{ fontWeight: 'bold', color: '#4d81e7' }}>
+                  {translation('forgetPassword')}
+                </Text>
+              </TouchableOpacity>
+              </>
+            )}
+            </View>
 
-            </>
-          )}
-
-          <View style={{ borderRadius: 10, overflow: 'hidden', marginTop: 10 }}>
-            <Button
-              onPress={accessApp}
-              title={translation(type + 'Btn')}
-              color="#6b8a6b"
-            />
-          </View>
-        </View>
+            <View style={{ borderRadius: 10, overflow: 'hidden'}}>
+              <TouchableOpacity onPress={accessApp} style={styles.btn}> 
+                <Text style={styles.btnText}>{translation(type + 'Btn')}</Text>
+              </TouchableOpacity>
+            </View>
+          
+       </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -213,30 +223,24 @@ const SignUp = ({ route, navigation }) => {
 const isRtl = I18nManager.isRTL;
 
 const styles = StyleSheet.create({
-  activeTabText:{
-    fontWeight:'900'
-  },
-  signupTabItem: {
-    borderRadius: 5,
-    opacity: 0.45
-  },
-
-  signup: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
     width: '100%',
-    fontSize: 11,
-    color: 'black',
+  },
+  screenContainer:{
+    marginTop:210
   },
   signupHeader: {
     textAlign: 'center',
+    fontFamily:'Poppins_700Bold'
   },
   signupTitle: {
     fontSize: 25,
-    fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily:'Poppins_700Bold'
   },
   signupSubTitle: {
     color: '#b4b4b4',
@@ -247,32 +251,48 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: isRtl ? 'row-reverse' : 'row',
     justifyContent: 'space-evenly',
-    backgroundColor: '#f5f6f9',
-    fontWeight: 'bold',
+    backgroundColor: '#EEEEEE',
     marginTop: 3,
     padding: 10,
     borderRadius: 10,
-    marginBottom: 30,
     marginTop: 15,
     gap: 80,
-    paddingLeft: 70,
-    paddingRight: 70,
+    paddingLeft: 50,
+    paddingRight: 50,
     height: 'fit-content',
+    width:330,
+    marginLeft:13
   },
- 
+  activeTabText:{
+    borderRadius: 5,
+    color:'black',
+    fontFamily:'Poppins_600SemiBold'
+  },
+  inactiveTabText: {
+    borderRadius: 5,
+    opacity: 0.4,
+    fontFamily:'Poppins_600SemiBold'
+  },
   signupForm: {
-    marginTop: 4
+    margin:20,
+    marginTop:35
   },
-
+  loginForm:{
+    margin:20,
+    marginTop:35,
+    marginBottom:5 , height:180, minHeight:250
+  },
   input: {
     borderWidth: 1,
-    borderColor: '#c4c4c4',
+    borderColor: '#dbdddf',
     padding: 10,
     width: 300,
     borderRadius: 10,
-    marginBottom: 10,
-    marginTop:9,
+    marginBottom: 7,
+    marginTop:5,
     textAlign: isRtl ? 'right' : 'left',
+    paddingVertical:15,
+    
   },
   inputContainer: {
     marginBottom: 10,
@@ -291,7 +311,23 @@ const styles = StyleSheet.create({
   dropdownMenuStyle: {
     backgroundColor: '#fff',
   },
+  btn:{
+    borderRadius:10,
+    backgroundColor:'#6b8a6b',
+    paddingVertical:15,
+    marginBottom:230,
+    width:315,
+    marginLeft:20,
+    marginTop:20
+  },
+  btnText:{
+    color:'white',
+    textAlign:'center',
+    fontFamily:'Poppins_700Bold'
+  },
+  
 });
+
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {

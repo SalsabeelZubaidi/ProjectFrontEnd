@@ -3,6 +3,7 @@ import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'rea
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
+import LogoImage from '../components/LogoImage';
 
 const ForgetPass = ({ route, navigation }) => {
   const { translation } = route.params;
@@ -15,11 +16,12 @@ const ForgetPass = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaProvider style={{backgroundColor: 'white'}} >
-      <SafeAreaView>
+    
+    <SafeAreaProvider style={{backgroundColor: 'white', paddingHorizontal:10}} >
+    <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
+    <LogoImage/>
 
-        <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
-
+      <SafeAreaView style={styles.container}>
         <View style={styles.forgetPsswrdHeader}>
           <Text style={styles.passHeader}>{translation('forgetPassHeader')}</Text>
           <Text style={styles.passSubtitle}>{translation('forgetPassSubtitle')}</Text>
@@ -36,12 +38,10 @@ const ForgetPass = ({ route, navigation }) => {
                 />
             </View>
             
-          <View style={{ borderRadius: 10, overflow: 'hidden', marginTop: 15  }}>
-            <Button
-              onPress={setPasswordPage}
-              title={translation('resetPassBtn')}
-              color="#6b8a6b"
-            />
+          <View style={styles.btnView}>
+            <TouchableOpacity onPress={setPasswordPage} style={styles.btn}> 
+              <Text style={styles.btnText}>{translation('resetPassBtn')}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>
@@ -51,16 +51,23 @@ const ForgetPass = ({ route, navigation }) => {
 
 
 const styles = StyleSheet.create({
-  forgetPsswrdHeader: {
-    marginTop:160,
+  container:{
+    marginTop:230,
+    backgroundColor:'white',
+    padding:15, 
+    borderRadius:10,
+    width:390,
+    marginRight:10,
+    marginLeft:0,
+    
   },
   passHeader: {
     fontSize: 25,
-    fontWeight: 'bold'
+    fontFamily:'Poppins_700Bold'
   },
   passSubtitle: {
     color: '#b4b4b4',
-    fontSize: 12
+    fontSize: 15
   },
   email:{
     marginTop:30
@@ -69,11 +76,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#c4c4c4',
     padding: 10,
-    width: 370,
+    width: 355,
     borderRadius: 5,
     marginBottom: 10,
-    marginTop:9
+    marginTop:9,
+    paddingVertical:15,
+    fontFamily:'Poppins_600SemiBold'
   },
+  btnView:{
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: 15, 
+    width:360
+  },
+  btn:{
+    borderRadius:10,
+    backgroundColor:'#6b8a6b',
+    padding:10,
+    paddingVertical:15
+    
+  },
+  btnText:{
+    color:'white',
+    textAlign:'center',
+    fontFamily:'Poppins_700Bold'
+  }
 });
 
 

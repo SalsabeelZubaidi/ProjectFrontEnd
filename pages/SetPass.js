@@ -3,6 +3,7 @@ import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity , ToastAndr
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
+import LogoImage from '../components/LogoImage';
 
 const SetPass = ({ route, navigation }) => {
   const { translation } = route.params;
@@ -28,18 +29,17 @@ const wrongPassToast = () => {
   };
 
   return (
-    <SafeAreaProvider style={{backgroundColor: 'white'}} >
-      <SafeAreaView>
-
-        <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
-
-        <View style={styles.setPsswrdHeader}>
+    <SafeAreaProvider style={{backgroundColor: 'white', paddingHorizontal:10}} >
+     <SwitchLanguageBtn style={{marginTop:50}} switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
+      <LogoImage/>
+      <SafeAreaView style={styles.container}> 
+        <View style={styles.setPsswrdcontainer}>
           <Text style={styles.setPassHeader}>{translation('setPassHeader')}</Text>
           <Text style={styles.setPassSubtitle}>{translation('setPassSubtitle')}</Text>
         </View>
 
          <View>
-            <Text style={{fontWeight:'bold'}}>{translation('password')}</Text>
+            <Text style={{fontFamily:'Poppins_600SemiBold'}}>{translation('password')}</Text>
             <TextInput
             style={styles.input}
             onChangeText={setPassword}
@@ -48,7 +48,7 @@ const wrongPassToast = () => {
             secureTextEntry={true}
             placeholder='Enter Your New Password'
             />
-            <Text style={{fontWeight:'bold'}}>{translation('confirmPass')}</Text>
+            <Text style={{fontFamily:'Poppins_600SemiBold'}}>{translation('confirmPass')}</Text>
             <TextInput
             style={styles.input}
             onChangeText={setConfirmPassword}
@@ -61,11 +61,9 @@ const wrongPassToast = () => {
                             
             
           <View style={{ borderRadius: 10, overflow: 'hidden', marginTop: 16}}>
-            <Button
-              onPress={wrongPassToast}
-              title={translation('updatePassBtn')}
-              color="#6b8a6b"
-            />
+            <TouchableOpacity onPress={wrongPassToast} style={styles.btn}> 
+              <Text style={styles.btnText}>{translation('updatePassBtn')}</Text>
+            </TouchableOpacity>
           </View>
         
       </SafeAreaView>
@@ -75,23 +73,32 @@ const wrongPassToast = () => {
 
 
 const styles = StyleSheet.create({
-  setPsswrdHeader: {
-    marginTop:160,
-    backgroundColor: 'white',
+
+  container:{
+    marginTop:200,
+    backgroundColor:'white',
+    padding:15, 
+    borderRadius:10,
+    width:390,
+    marginRight:10,
+    marginLeft:0,
+    
+  },
+
+  setPsswrdcontainer: {  
     width: '100%',
     fontSize: 11,
     color: 'black',
   },
-  
   setPassHeader:{
-    fontWeight:'bold',
+    fontFamily:'Poppins_700Bold',
     fontSize: 25
-
   },
   setPassSubtitle:{
     color:'#989898',
     marginBottom:25,
-    fontSize:13
+    fontSize:14,
+    
   },
   input: {
     borderWidth: 1,
@@ -100,7 +107,29 @@ const styles = StyleSheet.create({
     width: 370,
     borderRadius: 10,
     marginBottom: 22,
-    marginTop:9
+    marginTop:9,
+    paddingVertical:15,
+  },
+  btnView:{
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: 15, 
+    width:360
+  },
+  btn:{
+    borderRadius:10,
+    backgroundColor:'#6b8a6b',
+    padding:10,
+    paddingVertical:15
+    
+  },
+  btnText:{
+    color:'white',
+    textAlign:'center',
+    fontFamily:'Poppins_700Bold'
+  },
+  languegeBtn:{
+    marginTop:100
   }
 });
 
