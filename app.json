@@ -3,15 +3,9 @@
     "name": "project_frontend",
     "slug": "project_frontend",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/splash-icon.png",
+    "orientation": "adaptive",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#648264"
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -25,7 +19,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      "expo-font"
     ]
   }
 }
