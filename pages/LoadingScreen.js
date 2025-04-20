@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import 
-{ Text, TextInput, StyleSheet, View, Button, TouchableOpacity, Animated, useWindowDimensions, ScrollView,useAnimatedValue,ImageBackground, ActivityIndicator ,Dimensions  } 
-from 'react-native';
+{ Text, StyleSheet, View,  } from 'react-native';
 import LottieView from 'lottie-react-native';
-import { Translation } from 'react-i18next';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
-import { useFonts } from "expo-font";
 import LogoImage from '../components/LogoImage';
+
 
 
 
@@ -22,16 +20,16 @@ const { language, switchLanguage } = useLanguage();
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.replace('Plan'); 
-    }, 6000);
+    }, 3000);
 
     return () => clearTimeout(timer); 
   }, [navigation]);  
    
   
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={{backgroundColor:'white'}}>
     <View >
-    <View style={{marginTop:-30}}>
+    <View>
         <LogoImage/>
         <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
       </View>
@@ -76,4 +74,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default LoadingScreen;
+export default memo(LoadingScreen);

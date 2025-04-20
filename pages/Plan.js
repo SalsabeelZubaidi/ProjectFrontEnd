@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import 
 { Text, TextInput, StyleSheet, View, Button, TouchableOpacity, Animated, useWindowDimensions, ScrollView,useAnimatedValue,ImageBackground, Dimensions  } 
 from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import LottieView from 'lottie-react-native';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
 import { useLanguage } from '../LanguageContext';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -14,9 +13,18 @@ import LogoImage from '../components/LogoImage';
 
 const { width, height } = Dimensions.get('window');
 
+
+
+  
 const PLan = ({ route, navigation }) => {
     const { translation } = route.params;
-     const { language, switchLanguage } = useLanguage(); 
+    const { language, switchLanguage } = useLanguage(); 
+    const plansScreen = () => {
+        navigation.navigate('GradualPlan');
+    };
+    const toPlansScreen2 = () => {
+        navigation.navigate('ColdPlan');
+    };  
 
     return (
         <SafeAreaView style={styles.container}>
@@ -40,8 +48,11 @@ const PLan = ({ route, navigation }) => {
                         <Text style={styles.planTwoSub}>{translation('coldPlanSubTitle')} </Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.btn}>
-                <Text style={styles.btnText}> {translation('planBtn')} </Text>
+                <TouchableOpacity style={styles.btn} onPress={plansScreen}>
+                <Text style={styles.btnText}> {translation('planBtn')}gradual</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btn} onPress={toPlansScreen2}>
+                <Text style={styles.btnText}>{translation('planBtn')}cold trukey</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -63,7 +74,7 @@ const PLan = ({ route, navigation }) => {
         fontFamily:'Poppins_700Bold',
         fontSize:19.5,
         padding:12,
-        color:'#3C3D37'
+        color:'black'
     },
     plans:{
         marginLeft:38
@@ -112,4 +123,4 @@ const PLan = ({ route, navigation }) => {
 
 
 
-export default PLan;
+export default memo(PLan);
