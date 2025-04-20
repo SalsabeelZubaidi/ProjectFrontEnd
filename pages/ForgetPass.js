@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
@@ -38,7 +38,7 @@ const ForgetPass = ({ route, navigation }) => {
                 />
             </View>
             
-          <View style={styles.btnView}>
+          <View>
             <TouchableOpacity onPress={setPasswordPage} style={styles.btn}> 
               <Text style={styles.btnText}>{translation('resetPassBtn')}</Text>
             </TouchableOpacity>
@@ -52,7 +52,7 @@ const ForgetPass = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container:{
-    marginTop:230,
+    marginTop:160,
     backgroundColor:'white',
     padding:15, 
     borderRadius:10,
@@ -83,17 +83,16 @@ const styles = StyleSheet.create({
     paddingVertical:15,
     fontFamily:'Poppins_600SemiBold'
   },
-  btnView:{
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginTop: 15, 
-    width:360
-  },
+  
   btn:{
     borderRadius:10,
     backgroundColor:'#6b8a6b',
     padding:10,
-    paddingVertical:15
+    paddingVertical:15,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginTop: 15, 
+    width:360
     
   },
   btnText:{
@@ -104,4 +103,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ForgetPass;
+export default memo(ForgetPass);

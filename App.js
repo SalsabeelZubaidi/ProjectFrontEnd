@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { StyleSheet, ActivityIndicator, Text, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,18 @@ import QuestionsScreen from './pages/QuestionsScreen';
 import SplashScreen from './pages/SplashScreen';
 import LoadingScreen from './pages/LoadingScreen';
 import Plan from './pages/Plan';
+import GradualPlan from './pages/GradualPlan';
+import ColdPlan from './pages/ColdPlan';
+import HomeScreen from './pages/HomeScreen';
+import Profile from './pages/Profile';
+import ChatbotConvo from './pages/ChatbotConvo';
+
+
+
+
+
+
+
 
 
 
@@ -60,6 +72,13 @@ export default function App() {
   return (
     <LanguageProvider>
       <SafeAreaProvider>
+      <StatusBar 
+        translucent
+        backgroundColor="#6b8a6b"  // Android only
+        barStyle="dark-content"   // 'default', 'light-content', or 'dark-content'
+        hidden={false}
+                     // true to hide the status bar
+      />
         <AppNavigation />
       </SafeAreaProvider>
     </LanguageProvider>
@@ -119,6 +138,31 @@ function AppNavigation() {
           <Stack.Screen
             name="Plan"
             component={Plan}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="GradualPlan"
+            component={GradualPlan}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="ColdPlan"
+            component={ColdPlan}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="ChatbotConvo"
+            component={ChatbotConvo}
             initialParams={{ translation: t }}
           />
         </Stack.Navigator>

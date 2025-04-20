@@ -1,8 +1,5 @@
-import React from "react";
-import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faGlobe } from '@fortawesome/free-solid-svg-icons/faGlobe'
-import { useLanguage } from "../LanguageContext"; 
+import React,{memo} from "react";
+import {StyleSheet, Image } from "react-native";
 
 const LogoImage = () => {
 
@@ -18,15 +15,16 @@ const LogoImage = () => {
 const styles = StyleSheet.create({
   logo:{
     position:'absolute', 
-    top:60 , 
+    top:30 , 
     left:10,
     padding:0,
-    width:70,
-    height:70,
+    width:53,
+    height:45,
     borderRadius:10,
-    opacity:.9
+    opacity:.9,
+    
 }
   
 });
 
-export default LogoImage;
+export default memo(LogoImage);
