@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
@@ -15,6 +15,8 @@ const SignUp = ({ route, navigation }) => {
 
   const [type, setType] = useState('login');
   const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
+
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -33,6 +35,9 @@ const SignUp = ({ route, navigation }) => {
   const accessApp = () => {
     if (type === 'signup') {
       navigation.navigate('SignUpInfo');
+    }
+    else if (type === 'login') {
+      navigation.navigate('HomeScreen');
     }
   };
 
@@ -78,11 +83,11 @@ const SignUp = ({ route, navigation }) => {
           <View style={styles.signupForm}>
             {type === 'signup' && (
               <View>
-              
+                <View style={styles.names}>
                 <View>
                   <Text style={{fontWeight:'500'}}>{translation('firstName')}</Text>
                   <TextInput
-                    style={styles.input}
+                    style={styles.namesInput}
                     onChangeText={setFirstName}
                     value={firstName}
                     inputMode="text"
@@ -91,12 +96,22 @@ const SignUp = ({ route, navigation }) => {
                 <View>
                   <Text style={{fontWeight:'500'}}>{translation('lastName')}</Text>
                   <TextInput
-                    style={styles.input}
+                    style={styles.namesInput}
                     onChangeText={setLastName}
                     value={lastName}
                     inputMode="text"
                   />
                 </View>
+                </View>
+                <View>
+              <Text style={{fontWeight:'500'}}>{translation('userName')}</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setUserName}
+                value={userName}
+                inputMode="text"
+              />
+              </View>
                 <View>
               <Text style={{fontWeight:'500'}}>{translation('email')}</Text>
               <TextInput
@@ -179,14 +194,14 @@ const SignUp = ({ route, navigation }) => {
             {type === 'login' && (
               <>
               <View>
-              <Text style={{fontWeight:'500'}}>{translation('email')}</Text>
+              <Text style={{fontWeight:'500'}}>{translation('userName')}</Text>
               <TextInput
                 style={styles.input}
-                onChangeText={setEmail}
-                value={email}
-                inputMode="email"
+                onChangeText={setUserName}
+                value={userName}
+                inputMode="text"
               />
-            </View>
+              </View>
               <View>
               <Text style={{fontWeight:'500'}}>{translation('password')}</Text>
               <TextInput
@@ -199,8 +214,8 @@ const SignUp = ({ route, navigation }) => {
             </View>
               
               
-              <TouchableOpacity onPress={forgetPassPage} style={{ left: 185, marginBottom: 10 }}>
-                <Text style={{ fontWeight: 'bold', color: '#4d81e7' }}>
+              <TouchableOpacity onPress={forgetPassPage} style={{ left: 185, marginBottom: 10, marginTop:10 }}>
+                <Text style={{ fontFamily:'Poppins_600SemiBold', color: '#4d81e7', marginLeft:-10 }}>
                   {translation('forgetPassword')}
                 </Text>
               </TouchableOpacity>
@@ -260,7 +275,7 @@ const styles = StyleSheet.create({
     paddingLeft: 50,
     paddingRight: 50,
     height: 'fit-content',
-    width:330,
+    width:315,
     marginLeft:13
   },
   activeTabText:{
@@ -277,6 +292,10 @@ const styles = StyleSheet.create({
     margin:20,
     marginTop:35
   },
+  names:{
+    flex:1,
+    flexDirection:'row'
+  },
   loginForm:{
     margin:20,
     marginTop:35,
@@ -292,7 +311,18 @@ const styles = StyleSheet.create({
     marginTop:5,
     textAlign: isRtl ? 'right' : 'left',
     paddingVertical:15,
-    
+  },
+  namesInput:{
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#dbdddf',
+    marginBottom: 7,
+    marginTop:5,
+    textAlign: isRtl ? 'right' : 'left',
+    paddingVertical:15,
+    width:146,
+    justifyContent:'space-evenly',
+    margin:3
   },
   inputContainer: {
     marginBottom: 10,
@@ -352,4 +382,4 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default SignUp;
+export default memo(SignUp);

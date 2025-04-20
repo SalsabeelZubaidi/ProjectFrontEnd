@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import 
-{ Text, TextInput, StyleSheet, View, Button, TouchableOpacity, Animated, useWindowDimensions, ScrollView,useAnimatedValue,ImageBackground, Dimensions} 
+{ Text, TextInput, StyleSheet, View, TouchableOpacity, Animated, useWindowDimensions, ScrollView,useAnimatedValue} 
 from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
-import { I18nManager } from 'react-native';
 import LottieView from 'lottie-react-native';
 import LogoImage from '../components/LogoImage';
 
-const { width, height } = Dimensions.get('window');
 
 const QuestionsScreen = ({ route, navigation }) => {
   const { translation } = route.params;
@@ -17,17 +15,29 @@ const QuestionsScreen = ({ route, navigation }) => {
 
   const scrollX = useAnimatedValue(0);
   const {width: windowWidth} = useWindowDimensions();
-    
+  
+  const [isLastPage, setIsLastPage]= useState(false);
+  
+
   const [cigsCount, setCigsCount] = useState('');
   const [cigsCountPerPack, setCigsCountPerPack] = useState('');
   const [packCost, setPackCost] = useState('');
   const [quitTime, setQuitTime] = useState('');
+  const [smokingYears, setSmokingYears] = useState('');
 
-  const [isLastPage, setIsLastPage]= useState(false);
-  const [isFirstPage, setIsFirstPage]= useState(false);
+  const [isSelected1, setSelection1] = useState(false);
+  const [isSelected2, setSelection2] = useState(false);
+  const [isSelected3, setSelection3] = useState(false);
+  const [isSelected4, setSelection4] = useState(false);
+  const [isSelected5, setSelection5] = useState(false);
 
-  const forgetPassPage = () => {
-      //navigation.navigate('ForgetPass');
+
+  const toggleTrigger = (key) => {
+    setSelectedTriggers((prev) =>
+      prev.includes(key)
+        ? prev.filter((item) => item !== key)
+        : [...prev, key]
+    );
   };
 
   const loadingScreen=()=>{
@@ -41,11 +51,6 @@ const QuestionsScreen = ({ route, navigation }) => {
         setIsLastPage(true);
       } else {
         setIsLastPage(false);
-      }
-      if (contentOffset.x < paddingToRight) {
-        setIsFirstPage(true);
-      } else {
-        setIsFirstPage(false);
       }
     }
   };
@@ -61,14 +66,6 @@ const QuestionsScreen = ({ route, navigation }) => {
       </View>
       <LogoImage/>
       <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
-
-      {/* {
-        isFirstPage &&(
-          <Text style={styles.header}> {translation('Qscreen')}</Text>
-        )
-      }
-       */}
-        
         <View style={styles.scrollContainer}>
           <ScrollView 
             horizontal={true}
@@ -87,24 +84,78 @@ const QuestionsScreen = ({ route, navigation }) => {
                 { key: 'cigsCountPerPack', label: translation('cigsCountPerPack'), value: cigsCountPerPack, setValue: setCigsCountPerPack },
                 { key: 'packCost', label: translation('packCost'), value: packCost, setValue: setPackCost },
                 { key: 'quitTime', label: translation('quitTime'), value: quitTime, setValue: setQuitTime },
+                { key: 'smokingYears', label: translation('smokingYears'), value: smokingYears, setValue: setSmokingYears },
+                { key: 'triggers', label: translation('triggers')},
                 ].map((question, index) => (
                     <View key={question.key} style={[styles.card, { width: 390 }]}>
                     <Text style={styles.QuestionText}>{question.label}</Text>
+                    {question.key === 'triggers' ? (
+                      <View>
+                        <TouchableOpacity
+                          style={styles.checkboxContainer}
+                          onPress={() => setSelection1(!isSelected1 )}
+                        >
+                          <View style={styles.checkbox}>
+                          {isSelected1 && <View style={styles.checked}/>}
+                          </View>
+                          <Text style={styles.label}>{translation('Bored')} </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.checkboxContainer}
+                          onPress={() => setSelection2(!isSelected2)}
+                        >
+                          <View style={styles.checkbox}>
+                          {isSelected2 && <View style={styles.checked} />}
+                          </View>
+                          <Text style={styles.label}>{translation('frustrated')} </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.checkboxContainer}
+                          onPress={() => setSelection3(!isSelected3)}
+                        >
+                          <View style={styles.checkbox}>
+                          {isSelected3 && <View style={styles.checked} />}
+                          </View>
+                          <Text style={styles.label}>{translation('Drinking coffee')} </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.checkboxContainer}
+                          onPress={() => setSelection4(!isSelected4)}
+                        >
+                          <View style={styles.checkbox}>
+                          {isSelected4 && <View style={styles.checked} />}
+                          </View>
+                          <Text style={styles.label}>{translation('stressed or under pressure')} </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.checkboxContainer}
+                          onPress={() => setSelection5(!isSelected5)}
+                        >
+                          <View style={styles.checkbox}>
+                          {isSelected5 && <View style={styles.checked} />}
+                          </View>
+                          <Text style={styles.label}>{translation('Seeing someone else smoke')} </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ):(  
                     <TextInput
-                        style={styles.input}
-                        onChangeText={question.setValue}
-                        value={question.value}
-                        keyboardType='number-pad'
-                        placeholder="e.g., 10"
-                        />
-                        
-                        
+                      style={styles.input}
+                      onChangeText={question.setValue}
+                      value={question.value}
+                      keyboardType='number-pad'
+                      placeholder="e.g.,10"
+                      />)
+                    }  
                     </View>
                 ))}
             </ScrollView>
-            
+  
             <View style={styles.indicatorContainer}>
-                {Array(4).fill(0).map((_, index) => {
+                {Array(6).fill(0).map((_, index) => {
                     const width = scrollX.interpolate({
                     inputRange: [
                         windowWidth * (index - 1),
@@ -114,22 +165,18 @@ const QuestionsScreen = ({ route, navigation }) => {
                     outputRange: [8, 16, 8],
                     extrapolate: 'clamp',
                     });
-
                     return <Animated.View key={index} style={[styles.normalDot, { width }]} />;
                 })}
-            </View>
-
-            
-
-          
+            </View>  
         </View>
 
         {
           isLastPage && (
+            <View>
             <TouchableOpacity style={styles.btn} onPress={loadingScreen}>
-              <Text style={styles.btnText}> {translation('getStartedBtn')} </Text>
+            <Text style={styles.btnText}> {translation('getStartedBtn')} </Text>
             </TouchableOpacity>    
-          
+            </View>
           )
         }
       </>
@@ -155,37 +202,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width:900  
   },
-  // header:{
-  //   // fontSize:17,
-  //   // padding:23,
-  //   // textAlign:'center',
-  //   // borderRadius:30,
-  //   // backgroundColor:'#F8FAFC',
-  //   backgroundColor: 'white',
-  //   margin:13,
-  //   borderRadius: 16,
-  //   borderColor:'white',
-  //   padding: 20,
-  //   shadowColor: '#000',
-  //   shadowOpacity: .05,
-  //   shadowRadius: 10,
-  //   elevation: .5,
-  //   fontSize: 18,
-  //   color: '#333',
-  //   textAlign: 'left',
-  //   fontFamily:'Poppins_700Bold',
-  //   color:'#3F4F44' 
-  // },
+ 
   card: {
     display:'flex', 
     alignItems: 'center',
     justifyContent:'center',
     width:300,
-    marginLeft:13
+    marginLeft:10,
+    marginRight:10
   },
 
   QuestionText: {
-    fontSize: 22,
+    fontSize: 19.5,
     color:'black',
     textAlign:'center',
     justifyContent:'center',
@@ -209,18 +237,18 @@ const styles = StyleSheet.create({
   input:{
     backgroundColor: '#fff',
     borderRadius: 12,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: '#ddd',
     fontSize: 18,
-    width: '30%',
+    width: '25%',
     textAlign: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 3,
     marginTop:15,
-    fontFamily:'Poppins_600SemiBold'
+    fontFamily:'Poppins_400Regular'
   },
   btn: {
     padding:10,
@@ -237,9 +265,40 @@ const styles = StyleSheet.create({
   btnText:{
     fontFamily:'Poppins_700Bold',
     fontSize:20,
-    }
+    color:'black',
+    opacity:.56
+    },
+    checkboxContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderWidth: 2,
+      borderColor: '#6b8a6b',
+      marginRight: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical:10,
+      borderRadius:15
+    },
+    checked: {
+      width: 15,
+      height: 16,
+      backgroundColor: '#6b8a6b',
+      borderBlockColor:30,
+      borderRadius: 10, overflow: 'hidden', 
+      width: 17,
+      height: 17,
+    },
+    label: {
+      fontSize: 16,
+      fontFamily:'Poppins_400Regular'
+    },
+    
 });
 
 
 
-export default QuestionsScreen;
+export default memo(QuestionsScreen);

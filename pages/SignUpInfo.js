@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent:'center',
-    fontFamily:'Quicksand_600SemiBold'
+    fontFamily:'Poppins_400Regular',
+    marginHorizontal:10
 
   },
   lottie:{
@@ -64,4 +65,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SignUpInfo;
+export default memo(SignUpInfo);

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity , ToastAndroid } from 'react-native';
+import React, { useState, memo } from 'react';
+import { Text, TextInput, StyleSheet, View, TouchableOpacity , ToastAndroid } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
@@ -75,7 +75,7 @@ const wrongPassToast = () => {
 const styles = StyleSheet.create({
 
   container:{
-    marginTop:200,
+    marginTop:160,
     backgroundColor:'white',
     padding:15, 
     borderRadius:10,
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SetPass;
+export default memo(SetPass);

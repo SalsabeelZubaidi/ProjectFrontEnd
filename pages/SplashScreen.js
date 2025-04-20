@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, memo } from 'react';
 import 
-{ Text, TextInput, StyleSheet, View, Button, TouchableOpacity, Animated, useWindowDimensions, ScrollView,useAnimatedValue,ImageBackground, Dimensions  } 
+{StyleSheet, View, Dimensions  } 
 from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+
 import LottieView from 'lottie-react-native';
 
 
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
 
 
 
-export default SplashScreen;
+export default memo(SplashScreen);
