@@ -8,15 +8,17 @@ import LogoImage from '../components/LogoImage';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCircleChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { useUserInfo } from '../UserContext';
 
 
 const SignUpInfo = ({ route, navigation }) => {
   const { translation } = route.params;
-  const { language, switchLanguage } = useLanguage(); 
+  const { language, switchLanguage, isRtl } = useLanguage(); 
+  const { user } = useUserInfo();
 
   const [email, setEmail] = useState('');
  
-  const QuestionsScreen = () => { ///go to FillInfo screen
+  const QuestionsScreen = () => { 
      navigation.navigate('QuestionsScreen');
   };
 
@@ -28,15 +30,15 @@ const SignUpInfo = ({ route, navigation }) => {
           <View style={styles.lottie}>
             <LottieView style={{flex: 1}} source={require('../assets/bubblesBG.json')} autoPlay loop></LottieView>
           </View>
-          <View style={styles.text}>
-            <Text style= {{fontSize:20 , textAlign:'center',marginBottom:20}}> {translation('welcomeMsg')} </Text>
+          <View>
+            <Text style={[styles.text, {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular', fontSize:isRtl?27:22}]}>{translation('welcome')}{translation(' ')}{user?.first_name}{translation('! ')}{translation('helloMsg')}</Text>
           </View>  
         <View style={{ borderRadius: 30, overflow: 'hidden', width:100 , alignSelf:'center'}}>
           <TouchableOpacity onPress={QuestionsScreen}> 
-             <FontAwesomeIcon icon={faCircleChevronRight} size={39} style={styles.icon}/>
+             <FontAwesomeIcon icon={faCircleChevronRight} size={37} style={styles.icon}/>
           </TouchableOpacity>
         </View>
-        
+       
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -48,18 +50,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent:'center',
     fontFamily:'Poppins_400Regular',
-    marginHorizontal:10
-
+    backgroundColor:'white'
   },
   lottie:{
     height:300,
-    marginTop:0,
-
   },
   icon:{
     alignSelf:'center',
-    color:'#6b8a6b',
-  }
+    color:'#00ddb3',
+    opacity:.9,
+
+  
+  },
+  text:{
+    fontSize:20 , 
+    textAlign:'center',
+    fontFamily:'Poppins_400Regular',
+    paddingHorizontal:23,
+    paddingBottom:15,
+    marginTop:-15,
+    
+
+    
+  },
+  
+
   
   
 });

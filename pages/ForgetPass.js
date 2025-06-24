@@ -1,19 +1,38 @@
 import React, { useState, memo } from 'react';
-import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
+import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity, ToastAndroid } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
 import LogoImage from '../components/LogoImage';
+import { register, login, getUser, checkEmailExists } from "../apis/user";
+import { useUserInfo } from '../UserContext';
 
 const ForgetPass = ({ route, navigation }) => {
   const { translation } = route.params;
-  const { language, switchLanguage } = useLanguage(); 
+  const { language, switchLanguage, email, setEmail, isRtl } = useLanguage(); 
 
-  const [email, setEmail] = useState('');
- 
-  const setPasswordPage = () => {
-     navigation.navigate('SetPass');
-  };
+
+  const toSetPassword = async () => {
+    if (!email) {
+      ToastAndroid.show('Please enter your email.', ToastAndroid.LONG);
+      return;
+    }
+
+    try {
+      const exists = await checkEmailExists(email);
+
+      if (exists) {
+        navigation.navigate('SetPass');
+      } else {
+        ToastAndroid.show('This email is not registered.', ToastAndroid.LONG);
+      }
+    } catch (error) {
+      ToastAndroid.show('Something went wrong.', ToastAndroid.LONG);
+      console.log('Error in toSetPassword:', error.response || error.message);
+    }
+};
+
+
 
   return (
     
@@ -21,15 +40,15 @@ const ForgetPass = ({ route, navigation }) => {
     <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
     <LogoImage/>
 
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container ,{ direction: isRtl ? 'rtl' : 'ltr'}]}>
         <View style={styles.forgetPsswrdHeader}>
-          <Text style={styles.passHeader}>{translation('forgetPassHeader')}</Text>
-          <Text style={styles.passSubtitle}>{translation('forgetPassSubtitle')}</Text>
+          <Text style={[styles.passHeader, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_700Bold'}]}>{translation('forgetPassHeader')}</Text>
+          <Text style={[styles.passSubtitle, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_500Medium'}] }>{translation('forgetPassSubtitle')}</Text>
         </View>
 
         <View style={styles.email}>
             <View>
-                <Text>{translation('email')}</Text>
+                <Text style={{fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}}>{translation('email')}</Text>
                 <TextInput
                 style={styles.input}
                 onChangeText={setEmail}
@@ -39,8 +58,8 @@ const ForgetPass = ({ route, navigation }) => {
             </View>
             
           <View>
-            <TouchableOpacity onPress={setPasswordPage} style={styles.btn}> 
-              <Text style={styles.btnText}>{translation('resetPassBtn')}</Text>
+            <TouchableOpacity onPress={toSetPassword} style={styles.btn}> 
+              <Text style={[styles.btnText, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}]}>{translation('resetPassBtn')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -63,14 +82,15 @@ const styles = StyleSheet.create({
   },
   passHeader: {
     fontSize: 25,
-    fontFamily:'Poppins_700Bold'
+    fontFamily:'Poppins_700Bold',
+    marginBottom:5
   },
   passSubtitle: {
     color: '#b4b4b4',
     fontSize: 15
   },
   email:{
-    marginTop:30
+    marginTop:30,
   },
   input: {
     borderWidth: 1,
