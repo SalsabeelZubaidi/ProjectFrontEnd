@@ -8,6 +8,8 @@ import { useFonts } from 'expo-font';
 import { Poppins_400Regular } from '@expo-google-fonts/poppins/400Regular';
 import { Poppins_600SemiBold } from '@expo-google-fonts/poppins/600SemiBold';
 import { Poppins_700Bold } from '@expo-google-fonts/poppins/700Bold';
+import { Tajawal_400Regular, Tajawal_700Bold, Tajawal_500Medium } from '@expo-google-fonts/tajawal';
+import { Poppins_500Medium } from '@expo-google-fonts/poppins';
 import SignUp from './pages/SignUp';
 import SignUpInfo from './pages/SignUpInfo';
 import ForgetPass from './pages/ForgetPass';
@@ -21,29 +23,35 @@ import ColdPlan from './pages/ColdPlan';
 import HomeScreen from './pages/HomeScreen';
 import Profile from './pages/Profile';
 import ChatbotConvo from './pages/ChatbotConvo';
-
-
-
-
-
-
+import EditProfile from './pages/EditProfile';
+import DailyCheckin from './pages/DailyCheckin';
+import ProfileInfo from './pages/ProfileInfo';
+import FormerSmokingData from './pages/FormerSmokingData';
+import Notifications from './pages/Notifications';
 
 
 
 
 
 import { LanguageProvider, useLanguage } from './LanguageContext'; 
+import { UserProvider } from './UserContext';
 
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
+    Poppins_500Medium,
     Poppins_600SemiBold, 
-    Poppins_700Bold 
+    Poppins_700Bold,
+    Tajawal_400Regular,
+    Tajawal_500Medium,
+    Tajawal_700Bold, 
   });
-
+  
+ 
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -71,21 +79,20 @@ export default function App() {
 
   return (
     <LanguageProvider>
+    <UserProvider>
       <SafeAreaProvider>
       <StatusBar 
         translucent
         backgroundColor="#6b8a6b"  // Android only
         barStyle="dark-content"   // 'default', 'light-content', or 'dark-content'
-        hidden={false}
-                     // true to hide the status bar
+        hidden={false} // true to hide the status bar
       />
         <AppNavigation />
       </SafeAreaProvider>
+      </UserProvider>
     </LanguageProvider>
-  );
-  
+  ); 
 }
-
 
 function AppNavigation() {
   const { t, i18n } = useTranslation();
@@ -165,48 +172,37 @@ function AppNavigation() {
             component={ChatbotConvo}
             initialParams={{ translation: t }}
           />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="DailyCheckin"
+            component={DailyCheckin}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="ProfileInfo"
+            component={ProfileInfo}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="FormerSmokingData"
+            component={FormerSmokingData}
+            initialParams={{ translation: t }}
+          />
+          <Stack.Screen
+            name="Notifications"
+            component={Notifications}
+            initialParams={{ translation: t }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
   );
 }
-/*export default function App() {
-  const {t, i18n} = useTranslation();
 
-  const [key, setKey] = useState(0);
-  const [language, setLanguage]= useState('en');
-
-  const switchLanguage = () => {
-    var newLang= language=="ar"?"en": "ar";
-    i18n.changeLanguage(newLang).then(() =>{
-      I18nManager.allowRTL(language == 'ar');
-      I18nManager.forceRTL(language == 'ar');
-      setLanguage(newLang);
-      setKey(prevKey => prevKey + 1);
-    }).catch(err => console.log(err));
-  };
-
-  return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <SwitchLanguageBtn  switchLanguage={switchLanguage}  />
-        <NavigationContainer>
-          <Stack.Navigator 
-            key={key}
-            detachInactiveScreens={false}
-            initialRouteName="SignUp"
-            screenOptions={{
-              headerShown: false
-            }}
-          >
-            <Stack.Screen name="SignUp" component={SignUp} initialParams={{ translation: t, i18n: i18n}}/>
-            <Stack.Screen name="SignUpInfo" component={SignUpInfo} initialParams={{ translation: t }}/>
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaView>
-    </SafeAreaProvider>
-  );
-}*/
 
 const styles = StyleSheet.create({
   container: {
