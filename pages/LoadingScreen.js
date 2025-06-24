@@ -1,6 +1,6 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo} from 'react';
 import 
-{ Text, StyleSheet, View,  } from 'react-native';
+{ Text, StyleSheet, View} from 'react-native';
 import LottieView from 'lottie-react-native';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
@@ -13,14 +13,14 @@ import LogoImage from '../components/LogoImage';
 
 const LoadingScreen = ({ route, navigation }) => {
 const { translation } = route.params;
-const { language, switchLanguage } = useLanguage(); 
+const { language, switchLanguage , isRtl} = useLanguage(); 
 
-  
+
   
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.replace('Plan'); 
-    }, 3000);
+    }, 4000);
 
     return () => clearTimeout(timer); 
   }, [navigation]);  
@@ -28,25 +28,23 @@ const { language, switchLanguage } = useLanguage();
   
   return (
     <SafeAreaProvider style={{backgroundColor:'white'}}>
-    <View >
-    <View>
-        <LogoImage/>
-        <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
+      <View>
+          <LogoImage/>
+          <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />
       </View>
+      
+        <View style={styles.container} >
+          <LottieView style={styles.lottie}
+          source={require('../assets/lungsLoading.json')}
+          autoPlay
+          loop
+        />
+        </View>
+        <View>
+          <Text style={[styles.text, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}]}>{translation('loading')}</Text>
+        </View>  
 
-    <View style={styles.container} > 
-      <View>
-         <LottieView style={styles.lottie}
-        source={require('../assets/loading.json')}
-        autoPlay
-        loop
-      />
-      </View>
-      <View>
-        <Text style={styles.text}>{translation('loading')}</Text>
-      </View>  
-    </View>  
-    </View>
+        
     </SafeAreaProvider>
       
   );
@@ -54,24 +52,34 @@ const { language, switchLanguage } = useLanguage();
 
 const styles = StyleSheet.create({
   container: {
-    top:170,
+    top:200,
     alignItems: 'center',
     padding:20,
+   
+    
   },
   lottie:{
-    width:230,
-    height:230,
-    marginBottom:-85
+    width:300,
+    height:250,
+    marginBottom:-85,
+    position:'absolute',
+    alignSelf:'center',
+    opacity:.7
   },
   text:{
-    fontFamily:'Poppins_600SemiBold' ,
-    fontSize:20,
-    width:400 ,
+    fontFamily:'Poppins_400Regular' ,
+    fontSize:24,
     textAlign:'center',
     padding:30,
-    marginBottom:100
+    marginTop:430,
+    color: '#6b8a6b',
+    marginHorizontal:20,
+    paddingVertical:15
   },
-
+  container2: {
+    
+  },
+ 
 });
 
 export default memo(LoadingScreen);
