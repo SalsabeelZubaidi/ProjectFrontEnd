@@ -6,80 +6,175 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
 import { useLanguage } from '../LanguageContext';
 import LogoImage from '../components/LogoImage';
+import { useUserInfo } from '../UserContext';
+import { useFonts } from 'expo-font';
+import { Poppins_500Medium } from '@expo-google-fonts/poppins';
+import { Poppins_400Regular } from '@expo-google-fonts/poppins/400Regular';
+import { Poppins_600SemiBold } from '@expo-google-fonts/poppins/600SemiBold';
+import { Poppins_700Bold } from '@expo-google-fonts/poppins/700Bold';
+import { Tajawal_400Regular, Tajawal_700Bold, Tajawal_500Medium } from '@expo-google-fonts/tajawal';
+
 
 
 
 const GradualPlan = ({ route, navigation }) => {
     const { translation } = route.params;
-    const { language, switchLanguage } = useLanguage(); 
+    const { language, switchLanguage, isRtl } = useLanguage(); 
+    const { selectedPlan, smokingHabits} = useUserInfo()
+
+
+    
+      const [fontsLoaded] = useFonts({
+        Poppins_400Regular,
+        Poppins_500Medium,
+        Poppins_600SemiBold, 
+        Poppins_700Bold,
+        Tajawal_400Regular,
+        Tajawal_500Medium,
+        Tajawal_700Bold, 
+      });
+      
+     
+    
+      useEffect(() => {
+        if (fontsLoaded) {
+          const oldRender = Text.render;
+          Text.render = function (...args) {
+            const origin = oldRender.call(this, ...args);
+            return React.cloneElement(origin, {
+              style: [{ fontFamily: 'Poppins_600SemiBold' }, origin.props.style],
+            });
+          };
+        }
+      }, [fontsLoaded]);
+    
+      //Show loading while font is loading
+      if (!fontsLoaded) {
+        return (
+          <SafeAreaProvider>
+            <SafeAreaView style={styles.container}>
+              <ActivityIndicator size="large" color="#0000ff" />
+              <Text>Loading fonts...</Text>
+            </SafeAreaView>
+          </SafeAreaProvider>
+        );
+      }
+
+      
 
     const toHomeScreen = () => {
         navigation.navigate('HomeScreen');
     }; 
+
+    const smokingTriggers = smokingHabits?.data?.triggers?.reduce((str, trigger, index, array) => {
+        if (index === 0) return trigger;
+        if (index === array.length - 1) return `${str} and ${trigger}`;
+        return `${str}, ${trigger}`;
+      }, '') || 'No triggers specified';
+
+      const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+      };
+
+      const findDifference = (start, quit) => {
+        const startDate = new Date(start);
+        const quitDate = new Date(quit);
+        
+        const diffInMs = quitDate - startDate;
+        
+        const totalDays = Math.round(diffInMs / (1000 * 60 * 60 * 24));
+        
+        // Calculate full weeks
+        const weeks = Math.floor(totalDays / 7);
+        
+        return weeks;
+      };
 
     return (
         
         <SafeAreaProvider style={{backgroundColor:'white'}}>
             <SafeAreaView style={styles.container}>
                 <SwitchLanguageBtn switchLanguage={() =>{ switchLanguage(language === 'ar' ? 'en' : 'ar') }} />   
-                <View style={{position:'static', backgroundColor:'black'}}><LogoImage/></View>
-
-                
+                <View style={{position:'relative'}}><LogoImage/></View>
                 <ScrollView style={styles.ScrollView} overScrollMode="never">
-                    <View style={styles.planContainer}>
-                        <View style={styles.paragraphs}>
-                            <View style={styles.headers}>
-                                <Text style={styles.titles}>{translation('planType')} </Text>
+                    <View style={[styles.planContainer, {direction: isRtl ? 'rtl' : 'ltr'}]}>
+                        <View>
+                            <View style={[styles.headers, {direction: isRtl ? 'rtl' : 'ltr'}]}>
+                                <Text style={[styles.headerText, {borderLeftWidth: isRtl?0 : 4 ,borderRightWidth: isRtl?5 : 0,paddingRight:isRtl?7:0, fontFamily:isRtl?'Tajawal_700Bold':'Poppins_700Bold' }]}>{translation('planType')}</Text>
                             </View>
-                            <View style={styles.subPar}>
-                                <Text style={styles.paragraphsFields}> {translation('planName')} </Text>
-                                <Text style={styles.planNameSub}> {translation('planNameGrad')} </Text>
-                                <Text style={styles.planReason}> {translation('planReasone')} </Text>
-                                <Text style={styles.planReasonSub}> {translation('planReasoneSub')} </Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.paragraphs}>
-                            <View style={styles.headers}>
-                                <Text style={styles.titles}>{translation('smokingProfHeader')} </Text>
-                            </View>
-
-                            <View style={styles.subPar}>
-                                <Text style={styles.paragraphsFields}>{translation('CPD')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('years')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('smokingTriggers')}</Text>
+                            <View style={styles.labelsBlock}>
+                                <View style={styles.qaRow}>
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('planName')}</Text>
+                                    <Text style={[styles.labelValueText, {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular'}]}>{translation('planNameGrad')}</Text>
+                                </View>
+                                <View style={{marginRight:10}}>
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('planReasone')}</Text>
+                                    <Text style={[styles.labelValueText, {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular'}]}>{translation('planReasoneSub')}</Text>
+                                </View>
                             </View>
                         </View>
 
-                        <View style={styles.paragraphs}>
+                        <View>
                             <View style={styles.headers}>
-                                <Text style={styles.titles}>{translation('timelineTitle')} </Text>
+                                <Text style={[styles.headerText, {borderLeftWidth: isRtl?0 : 4 ,borderRightWidth: isRtl?5 : 0, paddingRight:isRtl?7:0, fontFamily:isRtl?'Tajawal_700Bold':'Poppins_700Bold'}]}>{translation('smokingProfHeader')}</Text>
                             </View>
-                            <View style={styles.subPar}>
-                                <Text style={styles.paragraphsFields}>{translation('startDate')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('quitDate')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('duration')}</Text>
+
+                            <View style={styles.labelsBlock}>
+                                <View style={styles.qaRow}>
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('CPD')} </Text>
+                                    <Text style={styles.labelValueText}>{smokingHabits.data.cigs_per_day}</Text>
+                                </View> 
+                                <View style={styles.qaRow}>   
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('years')}</Text>   
+                                    <Text style={styles.labelValueText}>{smokingHabits.data.years_of_smoking}</Text>
+                                </View>     
+                                <View >    
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold', marginRight:isRtl?22:0, marginBottom:5}]}>{translation('smokingTriggers')}</Text>
+                                    <Text style={[styles.labelValueText, { flexWrap: 'wrap',   width: 260,}]}>{smokingTriggers}</Text>
+                                </View>
                             </View>
                         </View>
 
-                        <View style={styles.paragraphs}>
+                        <View>
                             <View style={styles.headers}>
-                                <Text style={styles.titles}>{translation('weeksTitlle')} </Text>
+                                <Text style={[styles.headerText,{borderLeftWidth: isRtl?0 : 4 ,borderRightWidth: isRtl?5 : 0, paddingRight:isRtl?7:0 ,fontFamily:isRtl?'Tajawal_700Bold':'Poppins_700Bold'}]}>{translation('timelineTitle')} </Text>
                             </View>
-                            <View style={styles.subPar}>
-                                <Text style={styles.paragraphsFields}>{translation('week1')}</Text>
-                                    <Text style={styles.weekSubs}> {translation('week1Goal')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('week2')}</Text>
-                                    <Text style={styles.weekSubs}> {translation('week2Goal')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('week3')}</Text>
-                                    <Text style={styles.weekSubs}> {translation('week3Goal')}</Text>
-                                <Text style={styles.paragraphsFields}>{translation('week4')}</Text>
-                                    <Text style={styles.weekSubs}> {translation('week4Goal')}</Text>
+                            <View style={styles.labelsBlock}>
+                                <View style={styles.qaRow}>
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('startDate')}</Text>
+                                    <Text style={styles.labelValueText}> {formatDate(selectedPlan.start_date)}</Text>
+                                </View>
+                                <View style={styles.qaRow}>
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('quitDate')}</Text>
+                                    <Text style={styles.labelValueText}> {formatDate(selectedPlan.quit_date)}</Text>
+                                </View>
+                                <View style={styles.qaRow}>
+                                    <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('duration')} </Text>
+                                    <Text style={styles.labelValueText}>{findDifference(selectedPlan.start_date, selectedPlan.quit_date)} {translation('Weeks')} </Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View>
+                            <View style={styles.headers}>
+                                <Text style={[styles.headerText,{borderLeftWidth: isRtl?0 : 4 ,borderRightWidth: isRtl?5 : 0, paddingRight:isRtl?7:0, fontFamily:isRtl?'Tajawal_700Bold':'Poppins_700Bold'}]}>{translation('weeksTitlle')}</Text>
+                            </View>
+                            <View style={styles.labelsBlock}>
+                                <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('week1')}</Text>
+                                    <Text style={[styles.weekSubs,  {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular'}]}> {translation('week1Goal')}</Text>
+                                <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('week2')}</Text>
+                                    <Text style={[styles.weekSubs,  {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular'}]}> {translation('week2Goal')}</Text>
+                                <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('week3')}</Text>
+                                    <Text style={[styles.weekSubs,  {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular'}]}> {translation('week3Goal')}</Text>
+                                <Text style={[styles.labelText, {fontFamily:isRtl?'Tajawal_500Medium':'Poppins_600SemiBold'}]}>{translation('week4')}</Text>
+                                    <Text style={[styles.weekSubs,  {fontFamily:isRtl?'Tajawal_400Regular':'Poppins_400Regular'}]}> {translation('week4Goal')}</Text>
                             </View>
                         </View>
                         <TouchableOpacity style={styles.btn} onPress={toHomeScreen}>
-                            <Text style={styles.btnText}> {translation('homeScreenBtn')} </Text>
+                            <Text style={[styles.btnText, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}]}>{translation('homeScreenBtn')}</Text>
                         </TouchableOpacity>
+                        
                     </View>
                 </ScrollView>
              </SafeAreaView>
@@ -89,97 +184,91 @@ const GradualPlan = ({ route, navigation }) => {
 
     const styles = StyleSheet.create({
     container: {
-        alignItems: 'flex-start',
         backgroundColor:'white',
-        
+        justifyContent:'center'
     },
     planContainer:{
         padding:10,
-        marginTop:-16
+        marginTop:-16,
+       paddingHorizontal:10,
+       
     },
-    titles:{
-        fontSize:18,
+    headerText:{
+        fontSize:20,
         fontFamily:'Poppins_700Bold',
-        marginBottom:5,
         color:'#6b8a6b',
-        borderBottomColor:'grey',
         textShadowColor:'grey',
         textShadowRadius:2.5,
         shadowOpacity: .5,
+        borderLeftColor:'#6b8a6b',
+        borderRightColor:"#6b8a6b",
+        paddingLeft: 10,
     },
-    paragraphsFields:{
+    labelText:{
         fontFamily:'Poppins_600SemiBold',
-        fontSize:14.5,
-        marginVertical:13,
+        fontSize:16,
         marginLeft:5,
-        color:'#3C3D37',
+        color:'black',
         opacity:.9
     },
     weekSubs:{
         marginLeft:10,
         fontFamily:'Poppins_400Regular',
         color:'#3C3D37',
-        fontSize:13.5,
+        fontSize:14.5,
+        marginBottom:9
     },
-    planNameSub:{
-       left:59 ,
-       top:-38,
-      fontFamily:'Poppins_400Regular',
-      color:'#3C3D37',
-      fontSize:15,
-    },
-    planReason:{
-        marginTop:2,
-        top:-25,
-        marginLeft:5,
-        color:'#3C3D37',
-        fontSize:15,
-    },
-    planReasonSub:{
-        fontFamily:'Poppins_400Regular',
-        top:-23,
-        marginLeft:6,
-        color:'#3C3D37',
-        fontSize:13.5,
-    },
+    
     headers:{
-        borderBottomWidth:.7,
-         marginBottom:10,
-         marginTop:20,
-        borderBottomColor:'grey',
+        marginTop:20
     },
     ScrollView:{
         bounces:'false' ,
-        padding:1.5,
+        paddingRight:10,
         marginVertical:3, 
         marginTop:75,
         backgroundColor:'white',
-        paddingVertical:3
+        paddingVertical:3,
     },
     btn: {
         padding:10,
-        borderRadius:12,
+        borderRadius:30,
         backgroundColor:'#6b8a6b',
         marginLeft:15,
-        marginTop:24,
+        marginTop:20,
         shadowColor: '#000',
         shadowOpacity: 0.05,
         shadowRadius: 4,
         elevation: 3,
-        width: '55%',
+        width: '57%',
         alignSelf:'center',
-        opacity:.9
+        paddingHorizontal:13
 
     },
     btnText:{
         fontFamily:'Poppins_700Bold',
-        fontSize:15.5,
+        fontSize:16,
         textAlign:'center',
         color:'white'
     },
-    subPar:{
-        marginLeft:6,
-        marginBottom:10
+    labelsBlock:{
+        marginLeft:10,
+        marginVertical:10
+        
+    },
+    labelValueText:{
+        fontFamily:'Poppins_400Regular',
+        marginLeft:7,
+        color:"#3C3D37",
+        paddingRight:10,
+        fontSize:15
+    
+    },
+    qaRow:{
+        display:'flex' , 
+        flexDirection:'row', 
+        paddingRight:20,
+        marginVertical:10
     }
     
     });
