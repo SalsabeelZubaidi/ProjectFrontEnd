@@ -1,5 +1,5 @@
-import React, { useState, memo } from 'react';
-import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from 'react-native';
+import React, { useState, memo, useEffect } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { useLanguage } from '../LanguageContext';
 import SwitchLanguageBtn from '../components/SwitchLanguageBtn';
@@ -7,22 +7,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCircleUser, faSmile } from '@fortawesome/free-solid-svg-icons'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { faBell } from '@fortawesome/free-solid-svg-icons'
 import { faCircleRight } from '@fortawesome/free-solid-svg-icons'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import { faMapPin } from '@fortawesome/free-solid-svg-icons'
+import { logout } from '../apis/user';
+import { useUserInfo } from '../UserContext';
 
 
 
 const Profile = ({ route, navigation }) => {
   const { translation } = route.params;
-  const { language, switchLanguage } = useLanguage(); 
+  const { language, switchLanguage, isRtl} = useLanguage(); 
+  const { user, setUser, token, setSmokingHabits, setSelectedPlan, setToken} = useUserInfo()
 
   const [email, setEmail] = useState('');
  
-//   const setPasswordPage = () => {
-//      navigation.navigate('SetPass');
-//   };
+  const toEditProfile = () => {
+     navigation.navigate('EditProfile');
+  };
+  const toProfileInfo = () => {
+    navigation.navigate('ProfileInfo');
+  };
+  const toSmokingData = () => {
+    navigation.navigate('FormerSmokingData');
+  };
+  const toNotifications = () => {
+    navigation.navigate('Notifications');
+  };
+
+  const testLogout=()=>{
+    logout(token);
+    navigation.navigate('SignUp');
+    setUser({});
+    setToken("");
+    setSelectedPlan({})
+    setSmokingHabits({})
+  }
 
   return (
     
@@ -32,27 +51,29 @@ const Profile = ({ route, navigation }) => {
                 <View style={styles.subContainer}>
                     <View style={styles.profileWidget}>
                       <FontAwesomeIcon icon={faCircleUser} size={60} color='white'/>
-                      <Text style={styles.profileText}>{translation('realUserName')}</Text>
-                      <TouchableOpacity>
+                      <Text style={styles.profileText}>{user.first_name}</Text>
+                      <TouchableOpacity onPress={toEditProfile}>
                         <FontAwesomeIcon icon={faPenToSquare} size={19} color='white' style={styles.fontAwsPen} />
                       </TouchableOpacity>
                     </View>
                     <View style={styles.iconsList}>
                       <View>
                         <FontAwesomeIcon icon={faUser} size={23} color='#758694' style={styles.fontAwsProfile}/>
-                        <Text style={styles.iconsText}>{translation('basicInfo')}</Text>
-                      </View>
-                      <View>
-                        <FontAwesomeIcon icon={faBell} size={23} color='#758694' style={styles.fontAwsProfile}/>
-                        <Text style={styles.iconsText}>{translation('notification')}</Text>
+                        <TouchableOpacity onPress={toProfileInfo}>
+                          <Text style={[styles.iconsText, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}]}>{translation('basicInfo')}</Text>
+                        </TouchableOpacity> 
                       </View>
                       <View>
                         <FontAwesomeIcon icon={faCircleRight} size={23} color='#758694' style={styles.fontAwsProfile}/>
-                        <Text style={styles.iconsText}>{translation('formerSmokingData')}</Text>
+                        <TouchableOpacity onPress={toSmokingData}>
+                          <Text style={[styles.iconsText, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}]}>{translation('formerSmokingData')}</Text>
+                        </TouchableOpacity>
                       </View>
                       <View style={{marginTop:80}}>
                         <FontAwesomeIcon icon={faArrowRightFromBracket} size={23} color='#758694' style={styles.fontAwsProfile}/>
-                        <Text style={styles.iconsText}>{translation('logOut')}</Text>
+                        <TouchableOpacity onPress={testLogout}>
+                          <Text style={[styles.iconsText, {fontFamily:isRtl?'Tajawal_700Bold':'Poppins_600SemiBold'}]}>{translation('logOut')}</Text>
+                        </TouchableOpacity>
                       </View>
                     </View>
                 </View>
@@ -91,9 +112,7 @@ const styles = StyleSheet.create({
     marginTop:15
   },
   fontAwsPen:{
-    left:170,
-    opacity:.9,
-    top:-10
+    marginLeft:200
   },
   profileText:{
     marginLeft:10,
